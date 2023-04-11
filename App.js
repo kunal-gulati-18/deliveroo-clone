@@ -3,20 +3,17 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View } from 'react-native';
 import HomeScreen from './screens/HomeScreen';
+import 'react-native-url-polyfill/auto';
+import RestaurantScreen from './screens/RestaurantScreen';
 
 const Stack = createNativeStackNavigator();
 
-
 export default function App() {
 	return (
-		// <View className="flex-1 items-center justify-center bg-white text-red-400">
-		// 	<Text className="text-red-400">Open up App.js to start working on your app!</Text>
-		// 	<StatusBar style="auto" />
-		// </View>
-
 		<NavigationContainer>
 			<Stack.Navigator>
 				<Stack.Screen name="Home" component={HomeScreen} />
+				<Stack.Screen name="Restaurant" component={RestaurantScreen} />
 			</Stack.Navigator>
 		</NavigationContainer>
 	);

@@ -1,6 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
-import { useLayoutEffect } from 'react';
-import { Image, SafeAreaView, Text, TextInput, View, ScrollView } from 'react-native';
+import { useLayoutEffect, useEffect } from 'react';
+import {
+	Image,
+	SafeAreaView,
+	Text,
+	TextInput,
+	View,
+	ScrollView,
+} from 'react-native';
 import {
 	ChevronDownIcon,
 	UserIcon,
@@ -21,9 +28,6 @@ function HomeScreen() {
 
 	return (
 		<SafeAreaView className="bg-white">
-			{/* <View>
-				<Text className="text-red-400">Home Screen</Text>
-			</View> */}
 			<View className="flex-colpt-5 w-full">
 				<View className="flex-row items-center justify-between mx-4 ">
 					<View className="flex-row pb-3 items-center space-x-2">
@@ -64,7 +68,7 @@ function HomeScreen() {
 			</View>
 			<ScrollView className="bg-gray-100">
 				<Categories />
-                <FeaturedRow/>
+				<FeaturedRow />
 			</ScrollView>
 		</SafeAreaView>
 	);
