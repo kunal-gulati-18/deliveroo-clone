@@ -32,7 +32,7 @@ const FeaturedRowItems = ({
 				<View className="flex-row mt-2">
 					{restaurants?.map((item: CardData) => (
 						<FeaturedRowCard
-							key={item.id}
+							key={item._id}
 							data={{
 								...item,
 								imageUrl: (item as any).image,

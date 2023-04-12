@@ -18,11 +18,12 @@ const FeaturedRowCard = ({ data }: { data: CardData }) => {
 
 	return (
 		<TouchableOpacity
-			key={data?.id}
+			key={data?._id}
 			className="bg-white shadow mr-4"
 			onPress={() => {
+				console.log('dataa', data.id)
 				navigation.navigate('Restaurant', {
-					id: data.id
+					id: data._id
 				});
 			}}
 		>

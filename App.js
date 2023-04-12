@@ -4,17 +4,21 @@ import { StatusBar } from 'expo-status-bar';
 import { Text, View } from 'react-native';
 import HomeScreen from './screens/HomeScreen';
 import 'react-native-url-polyfill/auto';
-import RestaurantScreen from './screens/RestaurantScreen';
+import RestaurantScreen from './screens/RestaurantScreen/RestaurantScreen';
+import { Provider } from 'react-redux';
+import { store } from './store';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
 	return (
-		<NavigationContainer>
-			<Stack.Navigator>
-				<Stack.Screen name="Home" component={HomeScreen} />
-				<Stack.Screen name="Restaurant" component={RestaurantScreen} />
-			</Stack.Navigator>
-		</NavigationContainer>
+		<Provider store={store}>
+			<NavigationContainer>
+				<Stack.Navigator>
+					<Stack.Screen name="Home" component={HomeScreen} />
+					<Stack.Screen name="Restaurant" component={RestaurantScreen} />
+				</Stack.Navigator>
+			</NavigationContainer>
+		</Provider>
 	);
 }
