@@ -1,5 +1,6 @@
 import { useLayoutEffect, useEffect } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import CurrencyFormat from 'react-currency-format';
 import {
 	MapPinIcon,
 	StarIcon,
@@ -12,9 +13,14 @@ import {
 	ArrowLeftIcon,
 	QuestionMarkCircleIcon,
 } from 'react-native-heroicons/outline';
+import DishItem from './DishItem';
+import BasketButton from './BasketButton';
+import { selectBasketItems } from '../../slices/cartSlice';
+import { useSelector } from 'react-redux';
 
 const RestaurantScreen = () => {
 	const navigation = useNavigation();
+	const cartData = useSelector(selectBasketItems);
 	const {
 		params: { id },
 	} = useRoute();
@@ -28,64 +34,74 @@ const RestaurantScreen = () => {
 	const { data, loading } = useFetchRestaurantData({ id });
 
 	const goBackToHome = () => {
-		navigation.goBack;
+		navigation.goBack();
 	};
 
 	return data ? (
-		<ScrollView showsVerticalScrollIndicator={false}>
-			<View className="relative">
-				<Image
-					source={{
-						uri: urlFor(data.image).url(),
-					}}
-					className="w-full h-56 bg-gray-300 p-4 object-contain"
-				/>
+		<View className="relative h-full w-full">
+			<ScrollView className="relative" showsVerticalScrollIndicator={false}>
+				<View className="relative">
+					<Image
+						source={{
+							uri: urlFor(data.image).url(),
+						}}
+						className="w-full h-56 bg-gray-300 p-4 object-contain"
+					/>
 
-				<TouchableOpacity
-					onPress={goBackToHome}
-					className="absolute top-14 left-5 p-2 bg-gray-100 rounded-full"
-				>
-					<ArrowLeftIcon color={'#00ccbb'} size={20} />
-				</TouchableOpacity>
-			</View>
-			<View className="bg-white px-2 py-4">
-				<Text>{data?.name}</Text>
-				<View className="flex-row">
-					<StarIcon color="green" size={22} opacity={0.5} />
-					<View className="flex-row">
-						<View className="flex-row">
-							<MapPinIcon color="gray" opacity={0.4} size={22} />
-							<Text>Nearby</Text>
+					<TouchableOpacity
+						onPress={goBackToHome}
+						className="absolute top-14 left-5 p-2 bg-gray-100 rounded-full"
+					>
+						<ArrowLeftIcon color={'#00ccbb'} size={20} />
+					</TouchableOpacity>
+				</View>
+				<View className="bg-white pt-4">
+					<View className="px-4">
+						<Text className="text-3xl font-bold">{data?.name}</Text>
+						<View className="flex-row items-center space-x-2 my-1">
+							<View className="flex-row items-center space-x-1">
+								<StarIcon color="green" size={22} opacity={0.5} />
+								<Text className="text-xs text-green-500">{data.rating}</Text>
+							</View>
+							<View className="flex-row items-center space-x-2">
+								<View className="flex-row items-center space-x-1">
+									<MapPinIcon color="gray" opacity={0.4} size={22} />
+									<Text className="text-xs text-gray-500">Nearby .</Text>
+								</View>
+								<Text className="text-xs text-gray-500">{data?.address}</Text>
+							</View>
 						</View>
-						<Text>.{data?.address}</Text>
+						<Text className="mt-2 pb-4 text-gray-500">
+							{data?.short_description}
+						</Text>
 					</View>
-				</View>
-				<Text>{data?.short_description}</Text>
-			</View>
-			<View className="border-y-2 flex-row justify-between">
-				<View className="flex-row">
-					<QuestionMarkCircleIcon />
-					<Text>Have a food allergy?</Text>
-				</View>
-				<View>
-					<ChevronRightIcon />
-				</View>
-			</View>
-			<View>
-				<Text>Menu</Text>
-				<ScrollView showsVerticalScrollIndicator={false}>
-					{data?.dishes?.map((dish) => (
-						<View>
-							<Text>
-								{
-									dish.name
-								}
+					<TouchableOpacity className="border-y border-gray-300 flex-row justify-between items-center py-4 px-4">
+						<View className="flex-row items-center space-x-2">
+							<QuestionMarkCircleIcon color="gray" opacity={0.8} size={20} />
+							<Text className="pl-2 flex-1 text-md font-bold">
+								Have a food allergy?
 							</Text>
 						</View>
-					))}
-				</ScrollView>
-			</View>
-		</ScrollView>
+						<View className="flex-row">
+							<ChevronRightIcon color="#00ccbb" />
+						</View>
+					</TouchableOpacity>
+				</View>
+				<View>
+					<Text className="px-4 pt-6 mb-3 font-bold text-xl">Menu</Text>
+					<ScrollView showsVerticalScrollIndicator={false}>
+						{data?.dishes?.map((dish) => (
+							<DishItem {...dish} />
+						))}
+					</ScrollView>
+				</View>
+			</ScrollView>
+			{cartData?.length ? (
+				<View className="absolute bottom-10 z-50 w-full">
+					<BasketButton />
+				</View>
+			) : null}
+		</View>
 	) : null;
 };
 
