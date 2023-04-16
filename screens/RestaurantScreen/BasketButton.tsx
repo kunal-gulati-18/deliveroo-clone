@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const BasketButton = () => {
 	const cartData = useSelector(selectBasketItems);
+    console.log(cartData)
 	const cartTotalPrice = useSelector(selectBasketItemTotalPrice);
 	const navigation = useNavigation();
 
