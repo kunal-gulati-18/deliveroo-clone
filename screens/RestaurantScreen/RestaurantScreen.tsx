@@ -15,12 +15,15 @@ import {
 } from 'react-native-heroicons/outline';
 import DishItem from './DishItem';
 import BasketButton from './BasketButton';
-import { selectBasketItems } from '../../slices/cartSlice';
+import { currentBasketRestaurantOwner, selectBasketItems } from '../../slices/cartSlice';
 import { useSelector } from 'react-redux';
 
 const RestaurantScreen = () => {
 	const navigation = useNavigation();
 	const cartData = useSelector(selectBasketItems);
+	const currentlyActiveCartOwner = useSelector(currentBasketRestaurantOwner)
+
+	console.log('currentlyActiveCartOwner', currentlyActiveCartOwner)
 	const {
 		params: { id },
 	} = useRoute();
@@ -31,14 +34,14 @@ const RestaurantScreen = () => {
 		});
 	}, []);
 
-	const { data, loading } = useFetchRestaurantData({ id });
+	const { data } = useFetchRestaurantData({ id });
 
 	const goBackToHome = () => {
 		navigation.goBack();
 	};
 
 	return data ? (
-		<View className="relative h-full w-full">
+		<View key={data._id} className="relative h-full w-full">
 			<ScrollView className="relative" showsVerticalScrollIndicator={false}>
 				<View className="relative">
 					<Image
@@ -96,8 +99,8 @@ const RestaurantScreen = () => {
 					</ScrollView>
 				</View>
 			</ScrollView>
-			{cartData?.length ? (
-				<View className="absolute bottom-10 z-50 w-full">
+			{cartData?.length && currentlyActiveCartOwner === id ? (
+				<View className="absolute bottom-10 z-50 w-full p-4">
 					<BasketButton />
 				</View>
 			) : null}

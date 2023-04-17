@@ -5,7 +5,7 @@ import { useFetchDataFromApi } from './custom-hooks/useFetchDataFromApi';
 const FeaturedRow = () => {
 	const { data } = useFetchDataFromApi();
 	return (
-		<View>
+		<View className="pb-36">
 			{data?.map((item) => (
 				<FeaturedRowItems
 					id={item.id}

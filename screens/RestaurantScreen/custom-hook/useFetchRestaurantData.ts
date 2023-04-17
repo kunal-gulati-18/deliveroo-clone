@@ -3,7 +3,10 @@ import { checkDefinedValue } from '../../../utils';
 import sanityClient from '../../../sanity';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { setRestaurantData } from '../../../slices/restaurantSlice';
+import {
+	currentActiveRestaurant,
+	setRestaurantData,
+} from '../../../slices/restaurantSlice';
 
 export const useFetchRestaurantData = ({ id }: { id: string }) => {
 	const dispatch = useDispatch();
@@ -44,6 +47,16 @@ export const useFetchRestaurantData = ({ id }: { id: string }) => {
 				});
 		}
 	}, [id]);
+
+	useEffect(() => {
+		if (checkDefinedValue(data) && Object.keys(data)?.length) {
+			dispatch(
+				currentActiveRestaurant({
+					...data,
+				})
+			);
+		}
+	}, [data, dispatch]);
 
 	return {
 		data,

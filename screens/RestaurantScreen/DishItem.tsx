@@ -9,12 +9,14 @@ import {
 import { useSelector } from 'react-redux';
 import {
 	addItemInCart,
+	currentBasketRestaurantOwner,
 	removeItemFromCart,
 	selectBasketItemWithId,
+	setCartOwnerRestaurant,
 } from '../../slices/cartSlice';
 import { checkDefinedValue } from '../../utils';
 import { useDispatch } from 'react-redux';
-import BasketButton from './BasketButton';
+import { currentlyActiveRestaurantSelector } from '../../slices/restaurantSlice';
 
 const DishItem = ({
 	_id,
@@ -30,12 +32,29 @@ const DishItem = ({
 	image: any;
 }) => {
 	const dispatch = useDispatch();
+	const currentlyActiveRestaurant = useSelector(
+		currentlyActiveRestaurantSelector
+	);
+	const currentBasketOwner = useSelector(currentBasketRestaurantOwner);
 	const [isPressed, setIsPressed] = useState(false);
 
 	const cartItemCount = useSelector((state) =>
-		selectBasketItemWithId(state.cart, _id)
+		selectBasketItemWithId(state, _id)
 	);
 
+	const onAddItem = () => {
+		dispatch(
+			addItemInCart({
+				cartObj: { _id, price, name, description, image },
+				restaurantId: currentlyActiveRestaurant._id,
+			})
+		);
+	};
+
+	const onRemoveItem = () => {
+		if (cartItemCount === 0) return;
+		dispatch(removeItemFromCart({ _id }));
+	};
 	return (
 		<View className="relative w-full">
 			<TouchableOpacity
@@ -73,24 +92,25 @@ const DishItem = ({
 			</TouchableOpacity>
 			{isPressed ? (
 				<View className="flex-row items-center space-x-1 bg-white px-4">
-					<TouchableOpacity
-						onPress={() => {
-							if (cartItemCount === 0) return;
-							dispatch(removeItemFromCart({ _id, price }));
-						}}
-					>
+					<TouchableOpacity onPress={onRemoveItem}>
 						<MinusCircleIcon
-							color={cartItemCount ? '#00ccbb' : 'gray'}
+							color={
+								checkDefinedValue(cartItemCount) &&
+								currentlyActiveRestaurant?._id === currentBasketOwner
+									? '#00ccbb'
+									: 'gray'
+							}
 							size={40}
 						/>
 					</TouchableOpacity>
-					<Text>{checkDefinedValue(cartItemCount) ? cartItemCount : 0}</Text>
+					<Text>
+						{checkDefinedValue(cartItemCount) &&
+						currentlyActiveRestaurant?._id === currentBasketOwner
+							? cartItemCount
+							: 0}
+					</Text>
 					<TouchableOpacity>
-						<PlusCircleIcon
-							onPress={() => dispatch(addItemInCart({ _id, price }))}
-							color="#00ccbb"
-							size={40}
-						/>
+						<PlusCircleIcon onPress={onAddItem} color="#00ccbb" size={40} />
 					</TouchableOpacity>
 				</View>
 			) : null}

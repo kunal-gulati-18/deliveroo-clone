@@ -10,17 +10,18 @@ import { useNavigation } from '@react-navigation/native';
 
 const BasketButton = () => {
 	const cartData = useSelector(selectBasketItems);
-    console.log(cartData)
 	const cartTotalPrice = useSelector(selectBasketItemTotalPrice);
 	const navigation = useNavigation();
 
 	const goToCart = () => {
-		navigation.navigate('Cart');
+		navigation.navigate('Cart', {
+
+        });
 	};
 	return (
 		<TouchableOpacity
 			onPress={goToCart}
-			className="flex-row items-center bg-[#00ccbb] w-full mx-5 p-4 rounded-lg space-x-1"
+			className="flex-row items-center bg-[#00ccbb] w-full p-4 rounded-lg space-x-1"
 		>
 			<View>
 				<Text className="text-lg text-white font-extrabold bg-[#01a296] py-1 px-2">

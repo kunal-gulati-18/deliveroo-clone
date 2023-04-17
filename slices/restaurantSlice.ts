@@ -4,6 +4,7 @@ const restaurantSlice = createSlice({
 	name: 'restaurants',
 	initialState: {
 		restaurantsData: {},
+		currentlyActiveRestaurant: null,
 	},
 	reducers: {
 		setRestaurantData(state, action: PayloadAction<string>) {
@@ -13,8 +14,15 @@ const restaurantSlice = createSlice({
 				...payload,
 			};
 		},
+		currentActiveRestaurant(state, action: PayloadAction<{}>) {
+			const { payload } = action;
+			state.currentlyActiveRestaurant = payload;
+		},
 	},
 });
 
-export const { setRestaurantData } = restaurantSlice.actions;
+export const { currentActiveRestaurant, setRestaurantData } = restaurantSlice.actions;
+
+export const currentlyActiveRestaurantSelector = (state) =>
+	state.restaurants.currentlyActiveRestaurant;
 export default restaurantSlice.reducer;
