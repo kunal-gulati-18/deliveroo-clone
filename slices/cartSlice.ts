@@ -73,7 +73,7 @@ const cartSlice = createSlice({
 				});
 			}
 
-			state.cartState.data = newCartData;
+			state.cartState.data = newCartData.filter(cartItem => cartItem.count > 0);
 		},
 	},
 });

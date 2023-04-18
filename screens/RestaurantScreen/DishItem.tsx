@@ -12,7 +12,6 @@ import {
 	currentBasketRestaurantOwner,
 	removeItemFromCart,
 	selectBasketItemWithId,
-	setCartOwnerRestaurant,
 } from '../../slices/cartSlice';
 import { checkDefinedValue } from '../../utils';
 import { useDispatch } from 'react-redux';
@@ -52,8 +51,8 @@ const DishItem = ({
 	};
 
 	const onRemoveItem = () => {
-		if (cartItemCount === 0) return;
-		dispatch(removeItemFromCart({ _id }));
+		if (cartItemCount <= 0) return;
+		dispatch(removeItemFromCart({ cartObj: { _id } }));
 	};
 	return (
 		<View className="relative w-full">

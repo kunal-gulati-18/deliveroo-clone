@@ -1,6 +1,5 @@
-import { useLayoutEffect, useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import CurrencyFormat from 'react-currency-format';
 import {
 	MapPinIcon,
 	StarIcon,
@@ -23,7 +22,6 @@ const RestaurantScreen = () => {
 	const cartData = useSelector(selectBasketItems);
 	const currentlyActiveCartOwner = useSelector(currentBasketRestaurantOwner)
 
-	console.log('currentlyActiveCartOwner', currentlyActiveCartOwner)
 	const {
 		params: { id },
 	} = useRoute();
