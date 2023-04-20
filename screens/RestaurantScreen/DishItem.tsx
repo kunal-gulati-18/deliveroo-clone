@@ -11,6 +11,7 @@ import {
 	addItemInCart,
 	currentBasketRestaurantOwner,
 	removeItemFromCart,
+	selectBasketItemTotalPrice,
 	selectBasketItemWithId,
 } from '../../slices/cartSlice';
 import { checkDefinedValue } from '../../utils';
@@ -35,11 +36,11 @@ const DishItem = ({
 		currentlyActiveRestaurantSelector
 	);
 	const currentBasketOwner = useSelector(currentBasketRestaurantOwner);
-	const [isPressed, setIsPressed] = useState(false);
-
 	const cartItemCount = useSelector((state) =>
 		selectBasketItemWithId(state, _id)
 	);
+
+	const [isPressed, setIsPressed] = useState(false);
 
 	const onAddItem = () => {
 		dispatch(

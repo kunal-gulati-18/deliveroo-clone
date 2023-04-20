@@ -75,10 +75,16 @@ const cartSlice = createSlice({
 
 			state.cartState.data = newCartData.filter(cartItem => cartItem.count > 0);
 		},
+		emptyCart(state) {
+			state.cartState = {
+				data: [],
+				attachedRestaurantId: ''
+			}
+		}
 	},
 });
 
-export const { addItemInCart, removeItemFromCart } = cartSlice.actions;
+export const { addItemInCart, emptyCart, removeItemFromCart } = cartSlice.actions;
 
 export const selectBasketItems = (state) => state?.cart?.cartState?.data;
 

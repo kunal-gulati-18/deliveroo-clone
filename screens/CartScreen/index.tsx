@@ -11,7 +11,11 @@ import { XCircleIcon } from 'react-native-heroicons/solid';
 import { useSelector } from 'react-redux';
 import { currentlyActiveRestaurantSelector } from '../../slices/restaurantSlice';
 import CurrencyFormat from 'react-currency-format';
-import { removeItemFromCart, selectBasketItems } from '../../slices/cartSlice';
+import {
+	removeItemFromCart,
+	selectBasketItemTotalPrice,
+	selectBasketItems,
+} from '../../slices/cartSlice';
 import { urlFor } from '../../sanity';
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
@@ -25,19 +29,25 @@ const CartScreen = () => {
 		currentlyActiveRestaurantSelector
 	);
 	const cartItems = useSelector(selectBasketItems);
+	const cartTotalPrice = useSelector(selectBasketItemTotalPrice);
+
 	const animationRef = useRef(null);
 
 	const removeItemFromCartFn = (_id: string) => {
 		dispatch(removeItemFromCart({ cartObj: { _id } }));
 	};
 
+	const placeOrder = () => {
+		navigation.navigate('Preparing order');
+	};
+
 	useEffect(() => {
-		if (animationRef.current) {
+		if (animationRef.current && !cartItems?.length) {
 			setTimeout(() => {
 				animationRef.current.play();
 			});
 		}
-	}, [animationRef]);
+	}, [animationRef, cartItems]);
 
 	return (
 		<View className="flex-col h-full w-full flex-1 relative">
@@ -74,15 +84,15 @@ const CartScreen = () => {
 							</View>
 						</View>
 					</View>
-					<View className="h-auto">
+					<>
 						<ScrollView
 							showsVerticalScrollIndicator={false}
-							className="flex-col bg-white mt-4 h-auto divide-y divide-gray-200"
+							className="flex-col mt-4 h-auto divide-y divide-gray-200"
 						>
 							{cartItems
 								?.filter((cartItem) => cartItem.count > 0)
 								?.map((cartItem) => (
-									<View className="bg-white p-4 mx-2 items-center justify-between flex-row">
+									<View className="bg-white p-4 items-center justify-between flex-row">
 										<View className="items-center flex-row space-x-3">
 											<Text className="text-sm text-gray-400">
 												{cartItem.count}x
@@ -118,9 +128,60 @@ const CartScreen = () => {
 									</View>
 								))}
 						</ScrollView>
-					</View>
-					<View className="relative bottom-0">
-						<Text>Footer</Text>
+					</>
+					<View className="relative bottom-1 p-5 bg-white flex-col space-y-4 w-full">
+						<View className="flex-row items-center justify-between">
+							<Text className="text-gray-400">Subtotal</Text>
+							<Text>
+								<CurrencyFormat
+									value={cartTotalPrice}
+									displayType="text"
+									prefix="€"
+									renderText={(formattedValue) => (
+										<Text className="text-gray-400">{formattedValue}</Text>
+									)}
+									thousandSeparator={true}
+								/>
+							</Text>
+						</View>
+						<View className="flex-row items-center justify-between">
+							<Text className="text-gray-400">Delivery fee</Text>
+							<Text>
+								<CurrencyFormat
+									value={3.9}
+									displayType="text"
+									prefix="€"
+									renderText={(formattedValue) => (
+										<Text className="text-gray-400">{formattedValue}</Text>
+									)}
+									thousandSeparator={true}
+								/>
+							</Text>
+						</View>
+						<View className="flex-row items-center justify-between">
+							<Text>Order Total</Text>
+							<Text>
+								<CurrencyFormat
+									value={cartTotalPrice + 3.9}
+									displayType="text"
+									prefix="€"
+									renderText={(formattedValue) => (
+										<Text className="font-bold">{formattedValue}</Text>
+									)}
+									thousandSeparator={true}
+								/>
+							</Text>
+						</View>
+						<View className="w-full pb-6">
+							<TouchableOpacity
+								onPress={placeOrder}
+								className="w-full flex-row justify-center bg-[#00ccbb] rounded-lg p-4"
+							>
+								<Text className="text-white font-bold text-lg">
+									Place order
+								</Text>
+							</TouchableOpacity>
+						</View>
 					</View>
 				</>
 			) : (
@@ -132,6 +193,7 @@ const CartScreen = () => {
 						ref={animationRef}
 						className="h-50 w-full items-start flex-row mb-8"
 						source={require('../assets/emptyCart.json')}
+						autoPlay
 						loop={true}
 					/>
 					<Text className="text-slate-900 font-semibold mt-4">
