@@ -64,41 +64,57 @@ const DeliveryScreen = () => {
 					</View>
 				</View>
 			</SafeAreaView>
-			<View className="z-0 -mt-10">
-				<MapView
-					initialRegion={{
+			<MapView
+				initialRegion={{
+					latitude: 28.553558,
+					longitude: 77.259132,
+					latitudeDelta: 0.0922,
+					longitudeDelta: 0.0421,
+				}}
+				className="z-0 w-full -mt-10 flex-1"
+				mapType="mutedStandard"
+			>
+				<Marker
+					coordinate={{
 						latitude: 28.553558,
 						longitude: 77.259132,
-						latitudeDelta: 0.0922,
-						longitudeDelta: 0.0421,
 					}}
-					className="z-0 h-full w-full"
-					mapType="mutedStandard"
-				>
-					<Marker
-						coordinate={{
-							latitude: 28.553558,
-							longitude: 77.259132,
-						}}
-						title={currentlYActiveRestaurantInformation.name}
-						description={currentlYActiveRestaurantInformation.short_description}
-						identifier="origin"
-						pinColor="#00ccbb"
-					/>
+					title={currentlYActiveRestaurantInformation.name}
+					description={currentlYActiveRestaurantInformation.short_description}
+					identifier="origin"
+					pinColor="#00ccbb"
+				/>
 
-					<Marker
-						coordinate={{
-							latitude: 28.54,
-							longitude: 77.259132,
+				<Marker
+					coordinate={{
+						latitude: 28.54,
+						longitude: 77.259132,
+					}}
+					title={'Customer location'}
+					description={'Home'}
+					identifier="origin"
+					pinColor="red"
+				/>
+			</MapView>
+			<SafeAreaView className="p-5 bg-white h-28 flex-row items-center justify-between">
+				<View className="items-start flex-row space-x-2 ml-4">
+					<Image
+						source={{
+							uri: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=388&q=80',
 						}}
-						title={'Customer location'}
-						description={'Home'}
-						identifier="origin"
-						pinColor="red"
+						className="h-12 w-12 bg-gray-300 p-4 rounded-full"
 					/>
-				</MapView>
-			</View>
-			<View></View>
+					<View className="flex-col space-y-1">
+						<Text className="text-lg">
+							Kunal Gulati
+						</Text>
+						<Text className="text-sm text-gray-300">
+							Your rider  
+						</Text>
+					</View>
+				</View>
+				<Text className="text-[#00ccbb] mr-4">Call</Text>
+			</SafeAreaView>
 		</View>
 	);
 };
